@@ -1,4 +1,5 @@
 import { Box, Image, Badge, Button, Flex } from "@chakra-ui/react";
+import { useCartContext } from "../../../contexts/cart";
 
 interface CardOptions {
   title: string;
@@ -10,8 +11,25 @@ interface CardOptions {
 }
 
 export default function Card({ title, price, image }: CardOptions) {
+  const { addCartItem } = useCartContext();
+
+  const addItem = () => addCartItem({
+    price,
+    name: title,
+    image:{
+      alt: image.alt || '',
+      link: image.link
+    },
+  })
+
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p={'20px 20px'}>
+    <Box
+      maxW="sm"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      p={"20px 20px"}
+    >
       <Image src={image.link} alt={image.alt} />
       <Flex justifyContent={"space-between"}>
         <Box>
@@ -32,7 +50,12 @@ export default function Card({ title, price, image }: CardOptions) {
           </Box>
           <Box>R$ {price},00</Box>
         </Box>
-        <Button colorScheme="blue">+</Button>
+        <Button
+          colorScheme="blue"
+          onClick={() => addItem()}
+        >
+          +
+        </Button>
       </Flex>
     </Box>
   );
